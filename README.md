@@ -2,6 +2,8 @@
 
 Application web permettant d'afficher en temps réel les messages de chat provenant simultanément de TikTok Live et Twitch dans une interface unique.
 
+<img width="1902" height="906" alt="IVaDyhE" src="https://github.com/user-attachments/assets/fa228465-32ec-4d44-8ca6-8a362046da82" />
+
 ## 📋 Prérequis
 
 - [Node.js](https://nodejs.org/) (version 14 ou supérieure)
