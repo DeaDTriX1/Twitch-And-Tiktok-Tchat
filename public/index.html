@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Chat en direct</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #0e001b;
+        color: #fff;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #b88eff;
+    }
+
+    #chat {
+        max-height: 790px;
+        overflow-y: auto;
+        background-color: #1c0f33;
+        padding: 10px;
+        border-radius: 10px;
+        border: 2px solid #3c1f72;
+    }
+
+    .message {
+        display: flex;
+        align-items: center;
+        margin: 8px 0;
+        gap: 6px; /* espace entre pseudo et message */
+    }
+
+    /* Bulle du pseudo */
+    .username-bubble {
+        font-weight: bold;
+        text-decoration: underline;
+        padding: 6px 10px;
+        border-radius: 6px;
+        color: #fff;
+        white-space: nowrap;
+    }
+
+    /* Bulle du message */
+    .text-bubble {
+        padding: 6px 10px;
+        border-radius: 6px;
+        color: #fff;
+        max-width: 80%;
+        word-break: break-word;
+    }
+
+    /* Twitch colors */
+    .Twitch .username-bubble {
+        background: #7b5cd6;
+    }
+    .Twitch .text-bubble {
+        background: #6441A5;
+    }
+
+    /* TikTok colors */
+    .TikTok .username-bubble {
+        background: #7ee6ef;
+        color: #000;
+    }
+    .TikTok .text-bubble {
+        background: #69C9D0;
+        color: #000;
+    }
+
+    /* scrollbar esthétique */
+    #chat::-webkit-scrollbar {
+        width: 8px;
+    }
+    #chat::-webkit-scrollbar-thumb {
+        background-color: #8a5cf6;
+        border-radius: 4px;
+    }
+    #chat::-webkit-scrollbar-track {
+        background: #2a1752;
+    }
+</style>
+</head>
+<body>
+<h1>Chat en direct</h1>
+<div id="chat"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io();
+const chatDiv = document.getElementById('chat');
+const MAX_HEIGHT = 790;
+
+chatDiv.style.maxHeight = MAX_HEIGHT + "px";
+chatDiv.style.overflowY = "auto";
+
+function decodemessagetwitchandtiktok() {
+    const encoded = "UG93ZXJlZCBieSBEZWFkVHJpWA==";
+    return atob(encoded);
+}
+
+window.addEventListener('load', function() {
+    const messagetwitchandtiktok = document.createElement('div');
+    messagetwitchandtiktok.style.position = 'fixed';
+    messagetwitchandtiktok.style.bottom = '5px';
+    messagetwitchandtiktok.style.right = '5px';
+    messagetwitchandtiktok.style.fontSize = '10px';
+    messagetwitchandtiktok.style.color = 'rgba(255, 255, 255, 0.5)';
+    messagetwitchandtiktok.style.zIndex = '9999';
+    messagetwitchandtiktok.style.userSelect = 'none';
+    messagetwitchandtiktok.style.pointerEvents = 'none';
+    messagetwitchandtiktok.textContent = decodemessagetwitchandtiktok();
+    document.body.appendChild(messagetwitchandtiktok);
+});
+
+socket.on('chat-message', msg => {
+    const div = document.createElement('div');
+    div.className = `message ${msg.platform}`;
+
+    const usernameLink = document.createElement('a');
+    usernameLink.textContent = msg.username;
+    usernameLink.target = "_blank";
+    usernameLink.className = 'username-bubble';
+
+    if (msg.platform === "Twitch") {
+        usernameLink.href = `https://www.twitch.tv/${msg.username}`;
+    } else if (msg.platform === "TikTok") {
+        usernameLink.href = `https://www.tiktok.com/@${msg.username}`;
+    } else {
+        usernameLink.href = "#";
+    }
+
+    const textNode = document.createElement('div');
+    textNode.className = 'text-bubble';
+    textNode.textContent = msg.text;
+
+    div.appendChild(usernameLink);
+    div.appendChild(textNode);
+
+    chatDiv.appendChild(div);
+
+    while (chatDiv.scrollHeight > chatDiv.clientHeight) {
+        chatDiv.removeChild(chatDiv.firstChild);
+    }
+
+    chatDiv.scrollTop = chatDiv.scrollHeight;
+});
+</script>
+</body>
+</html>

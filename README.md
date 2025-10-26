@@ -9,7 +9,7 @@ Application web permettant d'afficher en temps réel les messages de chat proven
 
 ## 🚀 Installation
 
-1. **téléchargez les fichier**
+1. **téléchargez les fichier sur le discord**
 
 2. **Installez les dépendances**
    Exécuter le install.bat
