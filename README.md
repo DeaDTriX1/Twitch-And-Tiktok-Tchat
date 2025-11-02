@@ -27,12 +27,12 @@ Lancez le serveur avec start.bat
 
 Vous devriez voir :
 ```
-🌐 Serveur web démarré : http://localhost:3000
+🌐 Serveur web démarré : http://localhost:5000
 🎉 Connecté au live TikTok de @VotreNom
 🎮 Connecté au chat Twitch de #VotreChaine
 ```
 
-Ouvrez votre navigateur à l'adresse : **http://localhost:3000**
+Ouvrez votre navigateur à l'adresse : **http://localhost:5000**
 
 ## 🎨 Fonctionnalités
 
